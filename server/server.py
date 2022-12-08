@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,render_template,request
+from flask import Flask,jsonify,render_template,request,redirect,url_for
 import util
 app=Flask(__name__)
 
@@ -11,7 +11,7 @@ def get_locations_name():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route("/predict",methods=["POST","GET"])
+@app.route("/home/",methods=["POST","GET"])
 def predict_price_home():
     if request.method=="POST":
         total_sqft = float(request.form['total_sqft'])
@@ -27,11 +27,9 @@ def predict_price_home():
     else:
         return render_template("index.html")
 
-    
-
-@app.route("/home/")
-def home():
-    return render_template("index.html")
+@app.route("/<name>")
+def back_to_home(name):
+    return redirect(url_for("predict_price_home"))
 
 if __name__=="__main__":
     util.load_saved_artifacts()
